@@ -1,0 +1,9 @@
+coverage-report/
+target/
+.settings/
+*.iml
+*.class
+*.jar
+*.classpath
+*.project
+*.failed
