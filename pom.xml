@@ -6,7 +6,7 @@
 
     <groupId>io.github.elkan1788</groupId>
     <artifactId>ip2region</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
 
     <name>ip2region</name>
     <description>
