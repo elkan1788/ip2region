@@ -6,7 +6,7 @@
 
     <groupId>io.github.elkan1788</groupId>
     <artifactId>ip2region</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 
     <name>ip2region</name>
     <description>
@@ -24,6 +24,12 @@
             <url>http://apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
+    <scm>
+        <connection>scm:git:git@git.github.com:elkan1788/ip2region.git</connection>
+        <developerConnection>scm:git:git@git.github.com:elkan1788/ip2region.git</developerConnection>
+        <url>git@git.github.com:elkan1788/ip2region.git</url>
+    </scm>
 
     <developers>
         <developer>
@@ -48,13 +54,6 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>6.9.10</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-csv</artifactId>
-            <version>1.4</version>
             <scope>test</scope>
         </dependency>
 
@@ -88,7 +87,7 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <phase>package</phase>
+                        <phase>deploy</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -123,6 +122,42 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.3</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
             </plugin>
         </plugins>
     </build>
