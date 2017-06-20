@@ -4,6 +4,7 @@ package io.github.elkan1788.ip2region;
 import net.jcip.annotations.ThreadSafe;
 
 import java.io.*;
+import java.util.jar.JarInputStream;
 
 /**
  * ip db searcher class (Not thread safe)
@@ -55,13 +56,19 @@ public class IPSearcher {
      */
     public IPSearcher() throws IPSearcherException {
         try {
-            File IPDBFile = File.createTempFile("ip2region", ".db");
-            InputStream is = IPSearcher.class.getResourceAsStream("/ip2region.db");
-            byte[] tmpBuffer = new byte[is.available()];
-            is.read(tmpBuffer);
-            OutputStream os = new FileOutputStream(IPDBFile);
-            os.write(tmpBuffer);
-            raf = new RandomAccessFile(IPDBFile, "r");
+            File DBTmpFile = File.createTempFile("ip2region", ".db");
+
+            InputStream is = getClass().getResourceAsStream("/ip2region.db");
+            OutputStream os = new FileOutputStream(DBTmpFile);
+            byte[] buffer = new byte[2048];
+            int reader;
+            while ((reader = is.read(buffer)) != -1) {
+                os.write(buffer, 0, reader);
+            }
+            is.close();
+            os.close();
+
+            raf = new RandomAccessFile(DBTmpFile, "r");
             this.memorySearch("127.0.0.1");
         } catch (IOException e) {
             throw new IPSearcherException(e);
@@ -78,7 +85,6 @@ public class IPSearcher {
             raf = new RandomAccessFile(filePath, "r");
             this.memorySearch("127.0.0.1");
         } catch (IOException e) {
-            e.printStackTrace();
             throw new IPSearcherException(e);
         }
     }
